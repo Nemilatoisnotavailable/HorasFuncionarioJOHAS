@@ -260,8 +260,8 @@ fetch(
 
         document
         .getElementById("horas")
-        .innerText = 
-            formatarHoras(data.horas);
+        .innerText =
+            data.horas;
 
         return;
     }
@@ -273,8 +273,8 @@ fetch(
 
     document
     .getElementById("horas")
-    .innerText =
-        data.horas;
+    .innerText = 
+        formatarHoras(data.horas);
 
     document
     .getElementById("atualizacao")
