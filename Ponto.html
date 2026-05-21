@@ -157,9 +157,11 @@ const params =
         window.location.search
     );
 
-const id = params.get("id");
+const id =
+    params.get("id");
 
-const body = document.body;
+const body =
+    document.body;
 
 const vertical =
     window.innerHeight >
@@ -192,12 +194,16 @@ img.onerror = function () {
 img.src = fundoPersonalizado;
 
 fetch(
-"https://script.google.com/macros/s/AKfycbxNBG-_14NlEnN09nBYPyFj5iEstBFAqG3ApUGyjOl2axYFwcgOLB-g3xQ7P5PCHi3ecw/exec" + id
+"https://script.google.com/macros/s/AKfycbzEvM5jtDQaQkdqlcz6GzdS0TG_TgWW5wHxyi84aindkghYke4rGExZIpJnMd38Wcm77g/exec"
++ id
 )
 
-.then(response => response.json())
+.then(response => response.text())
 
-.then(data => {
+.then(text => {
+
+    const data =
+        JSON.parse(text);
 
     if (data.erro) {
 
@@ -236,7 +242,9 @@ fetch(
 
 })
 
-.catch(() => {
+.catch(error => {
+
+    console.error(error);
 
     document
     .getElementById("nome")
