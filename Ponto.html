@@ -77,9 +77,19 @@ body {
     word-break:break-word;
 }
 
-.horas {
+.label-horas {
 
     margin-top:20px;
+
+    font-size:
+        clamp(1rem, 3vw, 1.5rem);
+
+    opacity:0.9;
+}
+
+.horas {
+
+    margin-top:10px;
 
     font-size:
         clamp(2.5rem, 8vw, 5rem);
@@ -115,6 +125,12 @@ body {
     id="nome">
 
         Carregando...
+
+    </div>
+
+    <div class="label-horas">
+
+        Quantidade de horas:
 
     </div>
 
@@ -176,7 +192,7 @@ img.onerror = function () {
 img.src = fundoPersonalizado;
 
 fetch(
-"https://script.google.com/macros/s/AKfycbxNBG-_14NlEnN09nBYPyFj5iEstBFAqG3ApUGyjOl2axYFwcgOLB-g3xQ7P5PCHi3ecw/exec?id=" + id
+"https://script.google.com/macros/s/AKfycbxNBG-_14NlEnN09nBYPyFj5iEstBFAqG3ApUGyjOl2axYFwcgOLB-g3xQ7P5PCHi3ecw/exec" + id
 )
 
 .then(response => response.json())
