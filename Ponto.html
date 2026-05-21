@@ -260,6 +260,12 @@ function formatarHoras(texto) {
         return texto;
     }
 
+    const negativo =
+        texto.startsWith("-");
+
+    texto =
+        texto.replace("-", "");
+
     const partes =
         texto.split(":");
 
@@ -286,6 +292,10 @@ function formatarHoras(texto) {
 
     if (resultado === "") {
         resultado = "0min";
+    }
+
+    if (negativo) {
+        resultado = "-" + resultado;
     }
 
     return resultado;
@@ -385,10 +395,25 @@ if (!id) {
         .innerText =
             data.nome;
 
-        document
-        .getElementById("horas")
-        .innerText =
+        const horasFormatadas =
             formatarHoras(data.horas);
+
+        const horasElemento =
+            document.getElementById("horas");
+
+        horasElemento.innerText =
+            horasFormatadas;
+
+        if (horasFormatadas.startsWith("-")) {
+
+            horasElemento.style.color =
+                "#ff4d4d";
+
+        } else {
+
+            horasElemento.style.color =
+                "#ffffff";
+        }
 
         document
         .getElementById("atualizacao")
