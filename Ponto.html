@@ -297,7 +297,8 @@ function acessarPainel() {
         document
         .getElementById("tokenInput")
         .value
-        .trim();
+        .trim()
+        .toUpperCase();
 
     if (!token) {
         return;
