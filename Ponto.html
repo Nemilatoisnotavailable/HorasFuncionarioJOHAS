@@ -37,19 +37,9 @@ body {
     justify-content:center;
     align-items:center;
 
-    background-size:cover;
-    background-position:center center;
-    background-repeat:no-repeat;
-
-    color:white;
-
-    text-shadow:
-        2px 2px 8px rgba(0,0,0,0.9);
+    background:#f2f2f2;
 
     padding:20px;
-
-    transition:
-        background-image 0.5s ease;
 }
 
 .container {
@@ -58,17 +48,16 @@ body {
 
     background: rgba(1,182,249,1);
 
-    backdrop-filter: blur(6px);
-
     border-radius:24px;
 
     padding:clamp(20px, 4vw, 40px);
 
     text-align:center;
-    
+
+    color:white;
+
     box-shadow:
         0 10px 30px rgba(0,0,0,0.25);
-    
 }
 
 .nome {
@@ -113,7 +102,65 @@ body {
 
 .erro {
 
-    color:#ff8080;
+    color:#ffd0d0;
+}
+
+.token-input {
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:1.5rem;
+
+    text-align:center;
+
+    outline:none;
+}
+
+.botao {
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:white;
+
+    color:black;
+
+    font-size:1.1rem;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.botao:hover {
+
+    transform:scale(1.02);
+}
+
+.botao-sair {
+
+    margin-top:25px;
+
+    background:rgba(255,255,255,0.2);
+
+    color:white;
 }
 
 </style>
@@ -128,27 +175,70 @@ body {
     class="nome"
     id="nome">
 
-        Carregando...
+        Banco de Horas
 
     </div>
 
-    <div class="label-horas">
+    <!-- LOGIN -->
 
-        Quantidade de horas:
+    <div id="loginArea">
+
+        <div class="label-horas">
+
+            Digite seu código
+
+        </div>
+
+        <input
+        type="text"
+        id="tokenInput"
+        maxlength="4"
+        placeholder="0000"
+        class="token-input">
+
+        <button
+        onclick="acessarPainel()"
+        class="botao">
+
+            Acessar
+
+        </button>
 
     </div>
+
+    <!-- PAINEL -->
 
     <div
-    class="horas"
-    id="horas">
+    id="painelArea"
+    style="display:none;">
 
-        ...
+        <div class="label-horas">
 
-    </div>
+            Quantidade de horas:
 
-    <div
-    class="atualizacao"
-    id="atualizacao">
+        </div>
+
+        <div
+        class="horas"
+        id="horas">
+
+            ...
+
+        </div>
+
+        <div
+        class="atualizacao"
+        id="atualizacao">
+
+        </div>
+
+        <button
+        onclick="voltarLogin()"
+        class="botao botao-sair">
+
+            Voltar
+
+        </button>
 
     </div>
 
@@ -163,39 +253,6 @@ const params =
 
 const id =
     params.get("id");
-
-const body =
-    document.body;
-
-const vertical =
-    window.innerHeight >
-    window.innerWidth;
-
-const fundoPersonalizado =
-    vertical
-    ? `fundos/${id}-mobile.webp`
-    : `fundos/${id}-pc.webp`;
-
-const fundoPadrao =
-    vertical
-    ? "fundo-mobile.webp"
-    : "fundo-pc.webp";
-
-const img = new Image();
-
-img.onload = function () {
-
-    body.style.backgroundImage =
-        `url('${fundoPersonalizado}')`;
-};
-
-img.onerror = function () {
-
-    body.style.backgroundImage =
-        `url('${fundoPadrao}')`;
-};
-
-img.src = fundoPersonalizado;
 
 function formatarHoras(texto) {
 
@@ -234,66 +291,124 @@ function formatarHoras(texto) {
     return resultado;
 }
 
-fetch(
-"https://script.google.com/macros/s/AKfycbzEvM5jtDQaQkdqlcz6GzdS0TG_TgWW5wHxyi84aindkghYke4rGExZIpJnMd38Wcm77g/exec?id="
-+ id
-)
+function acessarPainel() {
 
-.then(response => response.text())
+    const token =
+        document
+        .getElementById("tokenInput")
+        .value
+        .trim();
 
-.then(text => {
+    if (!token) {
+        return;
+    }
 
-    const data =
-        JSON.parse(text);
+    window.location.search =
+        "?id=" + token;
+}
 
-    if (data.erro) {
+function voltarLogin() {
+
+    window.location.href =
+        window.location.pathname;
+}
+
+document
+.getElementById("tokenInput")
+.addEventListener("keypress", function(event) {
+
+    if (event.key === "Enter") {
+        acessarPainel();
+    }
+
+});
+
+if (!id) {
+
+    document
+    .getElementById("loginArea")
+    .style.display =
+        "block";
+
+} else {
+
+    document
+    .getElementById("loginArea")
+    .style.display =
+        "none";
+
+    document
+    .getElementById("painelArea")
+    .style.display =
+        "block";
+
+    fetch(
+    "https://script.google.com/macros/s/AKfycbzEvM5jtDQaQkdqlcz6GzdS0TG_TgWW5wHxyi84aindkghYke4rGExZIpJnMd38Wcm77g/exec?id="
+    + id
+    )
+
+    .then(response => response.text())
+
+    .then(text => {
+
+        const data =
+            JSON.parse(text);
+
+        if (data.erro) {
+
+            document
+            .getElementById("nome")
+            .innerText =
+                "Acesso inválido";
+
+            document
+            .getElementById("nome")
+            .classList
+            .add("erro");
+
+            document
+            .getElementById("painelArea")
+            .style.display =
+                "none";
+
+            document
+            .getElementById("loginArea")
+            .style.display =
+                "block";
+
+            return;
+        }
 
         document
         .getElementById("nome")
         .innerText =
-            "Acesso inválido";
-
-        document
-        .getElementById("nome")
-        .classList
-        .add("erro");
+            data.nome;
 
         document
         .getElementById("horas")
         .innerText =
-            data.horas;
+            formatarHoras(data.horas);
 
-        return;
-    }
+        document
+        .getElementById("atualizacao")
+        .innerText =
+            "Atualizado em: "
+            + data.atualizado;
 
-    document
-    .getElementById("nome")
-    .innerText =
-        data.nome;
+    })
 
-    document
-    .getElementById("horas")
-    .innerText = 
-        formatarHoras(data.horas);
+    .catch(error => {
 
-    document
-    .getElementById("atualizacao")
-    .innerText =
-        "Atualizado em: "
-        + data.atualizado;
+        console.error(error);
 
-})
+        document
+        .getElementById("nome")
+        .innerText =
+            "Erro de conexão";
 
-.catch(error => {
+    });
 
-    console.error(error);
-
-    document
-    .getElementById("nome")
-    .innerText =
-        "Erro de conexão";
-
-});
+}
 
 </script>
 
