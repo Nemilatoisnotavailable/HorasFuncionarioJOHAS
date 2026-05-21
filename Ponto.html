@@ -197,6 +197,43 @@ img.onerror = function () {
 
 img.src = fundoPersonalizado;
 
+function formatarHoras(texto) {
+
+    if (!texto.includes(":")) {
+        return texto;
+    }
+
+    const partes =
+        texto.split(":");
+
+    const horas =
+        parseInt(partes[0]);
+
+    const minutos =
+        parseInt(partes[1]);
+
+    let resultado = "";
+
+    if (horas !== 0) {
+        resultado += horas + "h";
+    }
+
+    if (minutos !== 0) {
+
+        if (resultado !== "") {
+            resultado += " ";
+        }
+
+        resultado += minutos + "min";
+    }
+
+    if (resultado === "") {
+        resultado = "0min";
+    }
+
+    return resultado;
+}
+
 fetch(
 "https://script.google.com/macros/s/AKfycbzEvM5jtDQaQkdqlcz6GzdS0TG_TgWW5wHxyi84aindkghYke4rGExZIpJnMd38Wcm77g/exec?id="
 + id
@@ -223,7 +260,8 @@ fetch(
 
         document
         .getElementById("horas")
-        .innerText = "";
+        .innerText = 
+            formatarHoras(data.horas);
 
         return;
     }
